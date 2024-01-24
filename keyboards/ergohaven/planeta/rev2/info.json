@@ -1,6 +1,6 @@
 {
     "manufacturer": "Ergohaven",
-    "keyboard_name": "Planeta",
+    "keyboard_name": "Planeta v2",
     "maintainer": "Ergohaven",
     "bootloader": "rp2040",
     "diode_direction": "COL2ROW",
@@ -13,7 +13,7 @@
         "nkro": true
     },
     "matrix_pins": {
-        "cols": ["GP0", "GP1", "GP2", "GP3", "GP4", "GP5", "GP6", "GP7", "GP9", "GP12", "GP13", "GP14"],
+        "cols": ["GP0", "GP1", "GP2", "GP3", "GP4", "GP5", "GP6", "GP7", "GP9", "GP12", "GP14", "GP15"],
         "rows": ["GP26", "GP22", "GP21", "GP20", "GP19"]
     },
     "processor": "RP2040",
@@ -23,6 +23,13 @@
         "pid": "0x6060",
         "device_version": "1.0.0"
     },
+    "rgb_matrix": {
+        "driver": "ws2812"
+    },
+    "ws2812": {
+        "pin": "GP27",
+        "driver": "vendor"
+    },    
     "layouts": {
         "LAYOUT": {
             "layout": [
