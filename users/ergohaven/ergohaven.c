@@ -1,4 +1,5 @@
 #include "ergohaven.h"
+#include "lang_ru_en.h"
 
 #ifdef AUDIO_ENABLE
 float base_sound[][2] = SONG(TERMINAL_SOUND);
@@ -6,7 +7,7 @@ float caps_sound[][2] = SONG(CAPS_LOCK_ON_SOUND);
 #endif
 
 bool is_alt_tab_active = false;
-uint16_t alt_tab_timer = 0;    
+uint16_t alt_tab_timer = 0;
 
 
 
@@ -43,7 +44,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         SEND_STRING(". ");
     #ifdef AUDIO_ENABLE
         PLAY_SONG(caps_sound);
-    #endif 
+    #endif
         add_oneshot_mods(MOD_BIT(KC_LSFT));  // Set one-shot mod for shift.
       }
       return false;
@@ -83,13 +84,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       if (record->event.pressed) {
     #ifdef AUDIO_ENABLE
         PLAY_SONG(caps_sound);
-    #endif 
-        }      
+    #endif
+        }
       return true; // Let QMK send the enter press/release events
-                  
+
     case LAYER_NEXT:
       // Our logic will happen on presses, nothing is done on releases
-      if (!record->event.pressed) { 
+      if (!record->event.pressed) {
         // We've already handled the keycode (doing nothing), let QMK know so no further code is run unnecessarily
         return false;
       }
@@ -110,7 +111,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     case LAYER_PREV:
       // Our logic will happen on presses, nothing is done on releases
-      if (!record->event.pressed) { 
+      if (!record->event.pressed) {
         // We've already handled the keycode (doing nothing), let QMK know so no further code is run unnecessarily
         return false;
       }
@@ -129,12 +130,42 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       layer_move(prev_layer);
       return false;
     default:
-      return true; // Process all other keycodes normally
+      return process_record_lang(keycode, record);
   }
    return process_record_keymap(keycode, record);
 }
 
+bool caps_word_press_user(uint16_t keycode) {
+    switch (keycode) {
+        // Keycodes for russian symbols
+        case KC_SCLN:
+        case KC_QUOT:
+        case KC_LBRC:
+        case KC_RBRC:
+        case KC_GRAVE:
+            if (get_cur_lang() == LANG_RU) {
+                add_weak_mods(MOD_BIT(KC_LSFT));
+                return true;
+            } else
+                return false;
 
+        // Keycodes that continue Caps Word, with shift applied.
+        case KC_A ... KC_Z:
+        case KC_MINS:
+            add_weak_mods(MOD_BIT(KC_LSFT)); // Apply shift to next key.
+            return true;
+
+        // Keycodes that continue Caps Word, without shifting.
+        case KC_1 ... KC_0:
+        case KC_BSPC:
+        case KC_DEL:
+        case KC_UNDS:
+            return true;
+
+        default:
+            return false; // Deactivate Caps Word.
+    }
+}
 
 void matrix_scan_user(void) { // The very important timer.
   if (is_alt_tab_active) {
