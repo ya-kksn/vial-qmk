@@ -4,8 +4,7 @@ BOOTLOADER = rp2040
 # ALLOW_WARNINGS = yes
 # PICO_INTRINSICS_ENABLED = no
 
-# Build options
+# Build Options
+ENCODER_ENABLE = yes
 OLED_ENABLE = yes
 OLED_DRIVER = ssd1306
-SPLIT_KEYBOARD = yes
-SERIAL_DRIVER = vendor
