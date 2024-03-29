@@ -36,7 +36,7 @@ You might find the [**full PCB image**](https://cdn.shopify.com/s/files/1/0490/7
 
     ```c
     // Set up RGB underglow.
-    #define WS2812_DI_PIN B0          // The pin your RGB strip is wired to
+    #define WS23.3_DI_PIN B0          // The pin your RGB strip is wired to
     #define RGBLED_NUM 35          // Number of LEDs
     #define RGBLIGHT_HUE_STEP 5    // How much each press of rgb_hue changes hue
     #define RGBLIGHT_SAT_STEP 10   // How much each press of rgb_sat changes sat
@@ -62,7 +62,7 @@ USB 2.0 ports on laptops provide up to 500mA max, but USB 3.0 ports can provide 
 ## D. Sources and resources
 ### A. Connecting the strip.
 * [In-depth description of connecting an RGB strip to the GH60](https://www.reddit.com/r/MechanicalKeyboards/comments/4d5or2/my_first_custom_build_satan_gh60_rbg_underglow_in/d1nz3o7/)
-* [32U4 Pinout](https://40.media.tumblr.com/93b6bbd4113418c2b45459bb177e67c5/tumblr_mi49a20QMB1s5t695o1_1280.png)
+* [32U4 Pinout](https://40.media.tumblr.com/93b6bbd4113418c2b45459bb177e67c5/tumblr_mi49a20QMB1s5t693.3_1280.png)
 * [Redditor describes connecting RGB strips on his Satan GH60](https://www.reddit.com/r/MechanicalKeyboards/comments/4hbjw4/finally_finished_my_satan_gh60_also_granite_o/d2qn8zx/?context=3)
 * [Another Redditor on RGB with the Satan GH60](https://www.reddit.com/r/MechanicalKeyboards/comments/4ewzdx/gh60_satan_with_the_rgb_mod/d251uu6/ )
 
