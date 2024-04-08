@@ -1,7 +1,8 @@
 {
-    "name": "Planeta v2",
-    "lighting": "qmk_rgblight",
-#include "users/ergohaven/vial_keycodes.json"
+    "name": "Planeta v1",
+    "lighting": "none",
+    "matrix":{ "rows":5, "cols":12 },
+#include "users/ergohaven/vial_custom_keycodes.json"
     "layouts":{
         "keymap":[
             [{"c":"#aaaaaa","x":3},"0,3",{"x":7.25},"0,8"],

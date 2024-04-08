@@ -1,9 +1,13 @@
 {
-  "name": "Velvet v1",
-  "lighting": "none",
-    "matrix":{ "rows":8, "cols":5 },
-#include "users/ergohaven/vial_keycodes.json"
-    "layouts":{
+    "name": "HPD (Pico)",
+    "vendorId": "0x444D",
+    "productId": "0x1337",
+    "matrix": {
+        "rows": 10,
+        "cols": 6
+    },
+#include "users/ergohaven/vial_custom_keycodes.json"
+    "layouts": {
         "keymap":[
             [{"c":"#aaaaaa","x":3},"0,3",{"x":10.05},"5,3"],
             [{"x":13.05,"y":-0.85},"5,4",{"x":1},"5,2",{"x":-14.05},"0,2",{"x":1},"0,4"],

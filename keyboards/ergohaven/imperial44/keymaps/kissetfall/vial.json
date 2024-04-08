@@ -1,5 +1,5 @@
 {
-    "name": "K:03",
+    "name": "Imperial44",
     "vendorId": "0x444D",
     "productId": "0x3636",
     "lighting": "qmk_rgblight",
@@ -7,7 +7,7 @@
         "rows": 10,
         "cols": 6
     },
-#include "users/ergohaven/vial_keycodes.json"
+#include "users/ergohaven/vial_custom_keycodes.json"
   "layouts": {
     "keymap": [
       [
