@@ -1,6 +1,5 @@
 #include QMK_KEYBOARD_H
 #include "ergohaven.h"
-#include "oled/ergohaven_dark.c"
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         [_BASE] = LAYOUT( \
@@ -26,14 +25,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
          _______, _______, KC_ASTR, KC_COLN, KC_SLSH, _______,                                           _______, KC_PIPE, KC_TILD, KC_AMPR, _______,  _______,
                            _______, _______, _______, ADJUST, _______, _______,        _______, _______, _______, _______, _______, _______ \
         ),
-    
+
       [_ADJUST] = LAYOUT(
         QK_BOOT, _______, _______, _______, _______, _______,                                            _______, _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______, _______,                                            _______, _______, _______, _______, DM_PLY1, DM_REC1,
         _______, _______, _______, _______, _______, _______,                                            _______, KC_VOLD, KC_MUTE, KC_VOLU, DM_PLY2, DM_REC2,
         _______, _______, _______, _______, _______, CG_TOGG,                                            _______, KC_MPRV, KC_MPLY, KC_MNXT, _______, DM_RSTP,
-                          _______, _______, _______, _______, _______, _______,        _______, _______, _______,  _______, _______, _______                  
-                                                                          
+                          _______, _______, _______, _______, _______, _______,        _______, _______, _______,  _______, _______, _______
+
        ),
 };
 
@@ -44,145 +43,4 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
   [2] = { ENCODER_CCW_CW(_______, _______), ENCODER_CCW_CW(_______, _______)},
   [3] = { ENCODER_CCW_CW(_______, _______), ENCODER_CCW_CW(_______, _______)},
 };
-#endif
-
-#ifdef OLED_ENABLE
-
-oled_rotation_t oled_init_user(oled_rotation_t rotation) {
-  if (!is_keyboard_master()) {
-    return OLED_ROTATION_270;  // bongocat, ergohaven_dark/light
-    // return OLED_ROTATION_270;  // luna 
-     }
-    else {
-    return OLED_ROTATION_270;  
-    }
-  return rotation;
-}
-
-void render_layer_state(void) {
-    // Print current mode
-    oled_write_ln_P(PSTR("K:03\n"), false);
-    /* oled_write_P(PSTR("\n"), false); */
-    oled_write_ln_P(PSTR("v3.3\n"), false);
-    oled_write_P(PSTR("\n"), false);
-    oled_write_ln_P(PSTR("MODE\n"), false);
-    if (keymap_config.swap_lctl_lgui) {
-        oled_write_ln_P(PSTR("Mac"), false);
-    } else {
-        oled_write_ln_P(PSTR("Win"), false);
-    }
-
-    oled_write_P(PSTR("\n\n"), false);
-    // Print current layer
-    oled_write_ln_P(PSTR("LAYER"), false);
-    switch (get_highest_layer(layer_state)) {
-        case _BASE:
-            oled_write_P(PSTR("Base\n"), false);
-            break;
-        case _RAISE:
-            oled_write_P(PSTR("Raise"), false);
-            break;
-        case _LOWER:
-            oled_write_P(PSTR("Lower"), false);
-            break;
-        case _ADJUST:
-            oled_write_P(PSTR("Adjst"), false);
-            break;
-        case _FOUR:
-            oled_write_P(PSTR("Four\n"), false);
-            break;
-        case _FIVE:
-            oled_write_P(PSTR("Five\n"), false);
-            break;
-        case _SIX:
-            oled_write_P(PSTR("Six\n"), false);
-            break;
-        case _SEVEN:
-            oled_write_P(PSTR("Seven"), false);
-            break;
-        case _EIGHT:
-            oled_write_P(PSTR("Eight"), false);
-            break;
-        case _NINE:
-            oled_write_P(PSTR("Nine\n"), false);
-            break;
-         case _TEN:
-            oled_write_P(PSTR("Ten\n"), false);
-            break;
-         case _ELEVEN:
-            oled_write_P(PSTR("Elevn"), false);
-            break;
-         case _TWELVE:
-            oled_write_P(PSTR("Twlve"), false);
-            break;
-         case _THIRTEEN:
-            oled_write_P(PSTR("Thrtn"), false);
-            break;
-         case _FOURTEEN:
-            oled_write_P(PSTR("Frtn\n"), false);
-            break;
-         case _FIFTEEN:
-            oled_write_P(PSTR("Fiftn"), false);
-            break;
-        default:
-            oled_write_ln_P(PSTR("Undef"), false);
-    }
-    oled_write_P(PSTR("\n"), false);
-    led_t led_usb_state = host_keyboard_led_state();
-    oled_write_ln_P(PSTR("CPSLK"), led_usb_state.caps_lock);
-}
-
-
-// Used to draw on to the oled screen
-bool oled_task_user(void) {
-    if (is_keyboard_master()) {
-        render_layer_state();
-    } else {
-        ergohaven_dark_draw();
-}
-    return false;
-}
-
-#endif
-
-#ifdef RGBLIGHT_ENABLE
-const rgblight_segment_t PROGMEM my_base_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-    {0, 4, HSV_WHITE}
-);
-const rgblight_segment_t PROGMEM my_layer1_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-    {0, 4, HSV_CYAN}
-);
-const rgblight_segment_t PROGMEM my_layer2_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-    {0, 4, HSV_RED}
-);
-const rgblight_segment_t PROGMEM my_layer3_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-    {0, 4, HSV_GOLDENROD}
-);
-
-// Now define the array of layers. Later layers take precedence
-const rgblight_segment_t* const PROGMEM my_rgb_layers[] = RGBLIGHT_LAYERS_LIST(
-    my_base_layer,    
-    my_layer1_layer,    
-    my_layer2_layer,    
-    my_layer3_layer     
-);
-
-
-void keyboard_post_init_user(void) {
-    // Enable the LED layers
-    rgblight_layers = my_rgb_layers;
-}
-
-layer_state_t default_layer_state_set_user(layer_state_t state) {
-    rgblight_set_layer_state(0, layer_state_cmp(state, _BASE));
-    return state;
-}
-
-layer_state_t layer_state_set_user(layer_state_t state) {
-    rgblight_set_layer_state(1, layer_state_cmp(state, _RAISE));
-    rgblight_set_layer_state(2, layer_state_cmp(state, _LOWER));
-    rgblight_set_layer_state(3, layer_state_cmp(state, _ADJUST));
-    return state;
-
-}
 #endif

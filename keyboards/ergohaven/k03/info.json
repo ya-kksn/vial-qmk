@@ -4,15 +4,6 @@
     "maintainer": "Ergohaven",
     "bootloader": "rp2040",
     "diode_direction": "COL2ROW",
-    "features": {
-        "bootmagic": true,
-        "command": false,
-        "rgblight": false,
-        "console": false,
-        "extrakey": true,
-        "mousekey": true,
-        "nkro": true
-    },
     "matrix_pins": {
         "cols": ["GP9", "GP10", "GP11", "GP12", "GP13", "GP14"],
         "rows": ["GP4", "GP5", "GP6", "GP7", "GP8"]
@@ -35,7 +26,7 @@
     "ws2812": {
         "pin": "GP28",
         "driver": "vendor"
-    },    
+    },
     "layouts": {
         "LAYOUT": {
             "layout": [
@@ -107,7 +98,7 @@
                 {"matrix": [9, 1], "x": 9.25, "y": 4.4, "label": "Enter"},
                 {"matrix": [9, 2], "x": 10.25, "y": 4.25, "label": "Raise"},
                 {"matrix": [9, 3], "x": 11.25, "y": 4, "label": "Ctrl"},
-                {"matrix": [9, 4], "x": 12.25, "y": 4.15, "label": "Alt"}
+                {"matrix": [9, 4], "x": 12.25, "y": 4.15, "label": "Alt"},
                 {"matrix": [9, 5], "x": 12.25, "y": 4.15, "label": "Super"}
             ]
         }
