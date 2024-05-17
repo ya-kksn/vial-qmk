@@ -5,10 +5,17 @@
 
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
     if (!is_keyboard_master()) {
-        return OLED_ROTATION_270; // bongocat, ergohaven_dark/light
-                                  // return OLED_ROTATION_270;  // luna
-    } else {
+#    ifdef EH_K02
+        return OLED_ROTATION_180;
+#    else
         return OLED_ROTATION_270;
+#    endif
+    } else {
+#    ifdef EH_K02
+        return OLED_ROTATION_180;
+#    else
+        return OLED_ROTATION_270;
+#    endif
     }
     return rotation;
 }
