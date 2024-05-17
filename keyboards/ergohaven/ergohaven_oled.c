@@ -32,14 +32,21 @@ typedef enum {
 } oled_mode_t;
 
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
-    if (is_keyboard_master()) {
-        if (vial_config.oled_master == OLED_BONGOCAT) return is_keyboard_left() ? OLED_ROTATION_0 : OLED_ROTATION_180;
-        if (vial_config.oled_master == OLED_MEDIA) return is_keyboard_left() ? OLED_ROTATION_0 : OLED_ROTATION_180;
-    } else {
-        if (vial_config.oled_slave == OLED_BONGOCAT) return is_keyboard_left() ? OLED_ROTATION_0 : OLED_ROTATION_180;
-        if (vial_config.oled_slave == OLED_MEDIA) return is_keyboard_left() ? OLED_ROTATION_0 : OLED_ROTATION_180;
+    int mode = is_keyboard_master() ? vial_config.oled_master : vial_config.oled_slave;
+    switch (mode) {
+        case OLED_BONGOCAT:
+            return is_keyboard_left() ? OLED_ROTATION_0 : OLED_ROTATION_180;
+            break;
+        case OLED_MEDIA:
+            return is_keyboard_left() ? OLED_ROTATION_0 : OLED_ROTATION_180;
+            break;
+#    ifdef EH_K02
+        case OLED_SPLASH:
+            return OLED_ROTATION_180;
+#    endif
+        default:
+            return OLED_ROTATION_270;
     }
-    return OLED_ROTATION_270;
 }
 
 void render_status_classic(void) {
