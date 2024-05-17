@@ -11,7 +11,6 @@
 typedef union {
     uint32_t raw;
     struct {
-        uint8_t ruen : 2;
         uint8_t oled_slave : 3;
         uint8_t oled_master : 3;
         bool    right_encoder : 1;
@@ -25,9 +24,9 @@ typedef enum {
     OLED_STATUS_CLASSIC = 0,
     OLED_STATUS_MODERN,
     OLED_STATUS_MINIMALISTIC,
-    OLED_MEDIA,
     OLED_SPLASH,
     OLED_BONGOCAT,
+    // OLED_MEDIA,
     OLED_DISABLED,
 } oled_mode_t;
 
@@ -35,9 +34,7 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
     int mode = is_keyboard_master() ? vial_config.oled_master : vial_config.oled_slave;
     switch (mode) {
         case OLED_BONGOCAT:
-            return is_keyboard_left() ? OLED_ROTATION_0 : OLED_ROTATION_180;
-            break;
-        case OLED_MEDIA:
+            // case OLED_MEDIA:
             return is_keyboard_left() ? OLED_ROTATION_0 : OLED_ROTATION_180;
             break;
 #    ifdef EH_K02
@@ -229,9 +226,9 @@ bool oled_task_kb(void) {
             render_status_minimalistic();
             break;
 
-        case OLED_MEDIA:
-            render_media();
-            break;
+            // case OLED_MEDIA:
+            //     render_media();
+            //     break;
 
         case OLED_SPLASH:
             ergohaven_dark_draw();
