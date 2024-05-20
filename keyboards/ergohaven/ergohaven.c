@@ -1,5 +1,7 @@
 #include "ergohaven.h"
 #include "lang_ru_en.h"
+#include "ergohaven_rgb.h"
+#include "hid.h"
 
 #ifdef AUDIO_ENABLE
 float base_sound[][2] = SONG(TERMINAL_SOUND);
@@ -197,6 +199,30 @@ void matrix_scan_user(void) { // The very important timer.
 //     }
 }
 
+void keyboard_post_init_kb(void) {
+#ifdef RGBLIGHT_ENABLE
+    keyboard_post_init_rgb();
+#endif
+    keyboard_post_init_hid();
+    keyboard_post_init_user();
+}
+
+layer_state_t default_layer_state_set_kb(layer_state_t state) {
+    state = default_layer_state_set_user(state);
+#ifdef RGBLIGHT_ENABLE
+    default_layer_state_set_rgb(state);
+#endif
+    return state;
+}
+
+layer_state_t layer_state_set_kb(layer_state_t state) {
+  state = layer_state_set_user(state);
+#ifdef RGBLIGHT_ENABLE
+    default_layer_state_set_rgb(state);
+#endif
+    return state;
+}
+
 static const char* PROGMEM LAYER_NAME[] =   {
     "Base ",
     "Raise",
@@ -216,9 +242,35 @@ static const char* PROGMEM LAYER_NAME[] =   {
     "Fiftn",
 };
 
+static const char* PROGMEM LAYER_UPPER_NAME[] =   {
+    "BASE ",
+    "RAISE",
+    "LOWER",
+    "ADJST",
+    "FOUR ",
+    "FIVE ",
+    "SIX  ",
+    "SEVEN",
+    "EIGHT",
+    "NINE ",
+    "TEN  ",
+    "ELEVN",
+    "TWLVE",
+    "THRTN",
+    "FRTN ",
+    "FIFTN",
+};
+
 const char* layer_name(int layer) {
     if (layer >= 0 && layer <= 15)
         return LAYER_NAME[layer];
     else
         return "Undef";
+}
+
+const char* layer_upper_name(int layer) {
+    if (layer >= 0 && layer <= 15)
+        return LAYER_UPPER_NAME[layer];
+    else
+        return "UNDEF";
 }
