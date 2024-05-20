@@ -17,8 +17,9 @@ void set_lang(uint8_t lang) {
                 register_code(KC_SPACE);
                 wait_ms(50);
                 unregister_code(KC_SPACE);
-                wait_ms(25);
+                wait_ms(50);
                 unregister_code(KC_LCTL);
+                wait_ms(50);
             } else {
                 register_code(KC_LGUI);
                 wait_ms(25);
