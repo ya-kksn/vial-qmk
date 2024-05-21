@@ -152,6 +152,14 @@ bool caps_word_press_user(uint16_t keycode) {
                 return false;
 
         // Keycodes that continue Caps Word, with shift applied.
+        case TD(0):
+        case TD(1):
+        case TD(2):
+        case TD(3):
+        case TD(4):
+        case TD(5):
+        case TD(6):
+        case TD(7):
         case KC_A ... KC_Z:
         case KC_MINS:
             add_weak_mods(MOD_BIT(KC_LSFT)); // Apply shift to next key.
