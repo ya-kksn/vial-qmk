@@ -40,7 +40,7 @@ oled_mode_t get_oled_mode(void) {
     return vial_config.oled_slave;
 }
 
-oled_rotation_t oled_init_user(oled_rotation_t rotation) {
+oled_rotation_t get_desired_oled_rotation(void) {
     int mode = get_oled_mode();
     switch (mode) {
         case OLED_BONGOCAT:
@@ -54,6 +54,13 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
         default:
             return OLED_ROTATION_270;
     }
+}
+
+static oled_rotation_t current_oled_rotation;
+
+oled_rotation_t oled_init_user(oled_rotation_t rotation) {
+    current_oled_rotation = get_desired_oled_rotation();
+    return current_oled_rotation;
 }
 
 void render_status_classic(void) {
@@ -198,25 +205,7 @@ void render_media(void) {
 __attribute__((weak)) void ergohaven_dark_draw(void) {}
 
 void via_set_layout_options_kb(uint32_t value) {
-    vial_config_t new_via_layouts;
-    new_via_layouts.raw = value;
-    if (is_keyboard_master()) {
-        if (vial_config.oled_master != new_via_layouts.oled_master) {
-            vial_config = new_via_layouts;
-            oled_init(OLED_ROTATION_0);
-        }
-    } else {
-        if (vial_config.oled_slave != new_via_layouts.oled_slave) {
-            vial_config = new_via_layouts;
-            oled_init(OLED_ROTATION_0);
-        }
-    }
-    vial_config = new_via_layouts;
-    if (vial_config.oled_master == OLED_DISABLED && //
-        vial_config.oled_slave == OLED_DISABLED)
-        oled_off();
-    else
-        oled_on();
+    vial_config.raw = value;
 }
 
 bool oled_task_kb(void) {
@@ -224,6 +213,8 @@ bool oled_task_kb(void) {
     if (!oled_task_user()) {
         return false;
     }
+
+    if (get_desired_oled_rotation() != current_oled_rotation) oled_init(get_desired_oled_rotation());
 
     uint8_t mode = get_oled_mode();
     switch (mode) {
@@ -253,6 +244,7 @@ bool oled_task_kb(void) {
 
         case OLED_DISABLED:
         default:
+            oled_clear();
             break;
     }
 
