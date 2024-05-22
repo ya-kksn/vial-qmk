@@ -27,9 +27,13 @@
          "title": "Switch to the previous layer",
          "shortName": "LPREV"
         },
-        {"name": "",
+        {"name": "QK_CAPS_WORD_TOGGLE",
+        "title": "Togle caps word",
+        "shortName": "CW\nToggle"
+        },
+        {"name": "NEW_QK_KB",
         "title": "Not using",
-        "shortName": ""
+        "shortName": "NQK"
         },
 
         {"name": "LG_TOGGLE",

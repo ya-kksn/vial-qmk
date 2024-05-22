@@ -2,7 +2,7 @@
 #include "ergohaven.h"
 
 enum lang_ru_en_custom_keycodes {
-    LG_TOGGLE = LAYER_PREV + 2,
+    LG_TOGGLE = NEW_QK_KB + 1,
     LG_SYNC,
     LG_SET_EN,
     LG_SET_RU,

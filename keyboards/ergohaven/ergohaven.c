@@ -131,6 +131,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       layer_move(prev_layer);
       return false;
+
+    case CAPS_WORD:
+      if (record->event.pressed) {
+        caps_word_toggle();
+      }
+      return false;
+
     default:
       return process_record_lang(keycode, record);
   }
