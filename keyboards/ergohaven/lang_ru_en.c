@@ -13,10 +13,7 @@ void set_lang(uint8_t lang) {
         case TG_DEFAULT:
             if (keymap_config.swap_lctl_lgui) {
                 register_code(KC_LCTL);
-                wait_ms(25);
-                register_code(KC_SPACE);
-                wait_ms(50);
-                unregister_code(KC_SPACE);
+                tap_code(KC_SPACE);
                 wait_ms(50);
                 unregister_code(KC_LCTL);
                 wait_ms(50);
@@ -28,6 +25,7 @@ void set_lang(uint8_t lang) {
                 unregister_code(KC_SPACE);
                 wait_ms(25);
                 unregister_code(KC_LGUI);
+                wait_ms(25);
             }
         case TG_MACRO30:
             dynamic_keymap_macro_send(QK_MACRO_30 - QK_MACRO);
