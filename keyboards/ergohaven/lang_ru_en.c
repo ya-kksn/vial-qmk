@@ -13,21 +13,16 @@ void set_lang(uint8_t lang) {
         case TG_DEFAULT:
             if (keymap_config.swap_lctl_lgui) {
                 register_code(KC_LCTL);
-                wait_ms(25);
-                register_code(KC_SPACE);
-                wait_ms(50);
-                unregister_code(KC_SPACE);
+                tap_code(KC_SPACE);
                 wait_ms(50);
                 unregister_code(KC_LCTL);
                 wait_ms(50);
             } else {
                 register_code(KC_LGUI);
-                wait_ms(25);
-                register_code(KC_SPACE);
+                tap_code(KC_SPACE);
                 wait_ms(50);
-                unregister_code(KC_SPACE);
-                wait_ms(25);
                 unregister_code(KC_LGUI);
+                wait_ms(50);
             }
         case TG_MACRO30:
             dynamic_keymap_macro_send(QK_MACRO_30 - QK_MACRO);
@@ -145,12 +140,24 @@ bool process_record_lang(uint16_t keycode, keyrecord_t* record) {
         return false;
     }
 
-    if (LG_EN_START <= keycode && keycode < LG_END) {
+    if (LG_EN_START <= keycode && keycode < LG_NUM) {
         if (record->event.pressed) {
             if (record->event.pressed) {
                 uint8_t lang = cur_lang;
                 set_lang(LANG_EN);
                 tap_code16(en_table[keycode - LG_EN_START]);
+                set_lang(lang);
+            }
+        }
+        return false;
+    }
+
+    if (keycode == LG_NUM) {
+        if (record->event.pressed) {
+            if (record->event.pressed) {
+                uint8_t lang = cur_lang;
+                set_lang(LANG_RU);
+                tap_code16(LSFT(KC_3));
                 set_lang(lang);
             }
         }
