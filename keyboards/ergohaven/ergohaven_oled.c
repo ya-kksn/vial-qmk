@@ -223,10 +223,14 @@ bool oled_task_kb(void) {
 
     if (activity_elapsed > EH_TIMEOUT || get_oled_mode() == OLED_DISABLED) {
         oled_off();
+#    ifdef RGBLIGHT_ENABLE
         rgblight_suspend();
+#    endif
         return false;
     } else {
+#    ifdef RGBLIGHT_ENABLE
         rgblight_wakeup();
+#    endif
         oled_on();
     }
 
