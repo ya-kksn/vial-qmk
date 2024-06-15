@@ -1,13 +1,13 @@
 #pragma once
 #include "ergohaven.h"
 
-enum lang_ru_en_custom_keycodes {
+enum ruen_custom_keycodes {
     LG_TOGGLE = LAYER_PREV + 2,
     LG_SYNC,
     LG_SET_EN,
     LG_SET_RU,
-    LG_SET_M30,
-    LG_SET_M31,
+    LG_SET_M0,
+    LG_SET_M1M2,
     LG_SET_DFLT,
 
     // symbols exist in russian and english layout
@@ -47,10 +47,12 @@ enum lang_ru_en_custom_keycodes {
 
 enum { LANG_EN = 0, LANG_RU };
 
-enum { TG_DEFAULT = 0, TG_MACRO30, TG_MACRO31 };
+enum { TG_DEFAULT = 0, TG_M0, TG_M1M2 };
 
-bool process_record_lang(uint16_t keycode, keyrecord_t *record);
+bool pre_process_record_ruen(uint16_t keycode, keyrecord_t *record);
 
-bool lang_sync_external(uint8_t lang);
+bool process_record_ruen(uint16_t keycode, keyrecord_t *record);
+
+void housekeeping_task_ruen(void);
 
 uint8_t get_cur_lang(void);

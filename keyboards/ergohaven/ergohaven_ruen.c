@@ -1,16 +1,18 @@
-#include "lang_ru_en.h"
+#include "ergohaven_ruen.h"
+#include "hid.h"
 
 static uint8_t cur_lang = LANG_EN;
 
 static uint8_t tg_mode = TG_DEFAULT;
 
-static uint32_t lang_sync_time = 0;
+static uint32_t revert_ru_time = 0;
+
+static bool should_revert_ru = false;
 
 void set_lang(uint8_t lang) {
-    if (cur_lang == lang) return;
-
     switch (tg_mode) {
         case TG_DEFAULT:
+            if (cur_lang == lang) return;
             if (keymap_config.swap_lctl_lgui) {
                 register_code(KC_LCTL);
                 tap_code(KC_SPACE);
@@ -24,17 +26,20 @@ void set_lang(uint8_t lang) {
                 unregister_code(KC_LGUI);
                 wait_ms(50);
             }
-        case TG_MACRO30:
-            dynamic_keymap_macro_send(QK_MACRO_30 - QK_MACRO);
+        case TG_M0:
+            if (cur_lang == lang) return;
+            dynamic_keymap_macro_send(QK_MACRO_0 - QK_MACRO);
             break;
-        case TG_MACRO31:
-            dynamic_keymap_macro_send(QK_MACRO_31 - QK_MACRO);
+        case TG_M1M2:
+            if (lang == LANG_EN)
+                dynamic_keymap_macro_send(QK_MACRO_1 - QK_MACRO);
+            else
+                dynamic_keymap_macro_send(QK_MACRO_2 - QK_MACRO);
             break;
         default:
             break;
     }
-    lang_sync_time = timer_read32();
-    cur_lang       = lang;
+    cur_lang = lang;
 }
 
 void lang_toggle(void) {
@@ -49,17 +54,6 @@ void lang_sync(void) {
         cur_lang = LANG_RU;
     else
         cur_lang = LANG_EN;
-}
-
-bool lang_sync_external(uint8_t lang) {
-    if (timer_elapsed32(lang_sync_time) < 500) return false;
-    lang_sync_time = timer_read32();
-
-    if (lang == LANG_EN)
-        cur_lang = LANG_EN;
-    else
-        cur_lang = LANG_RU;
-    return true;
 }
 
 uint8_t get_cur_lang(void) {
@@ -99,7 +93,31 @@ uint16_t en_table[] = {
     KC_QUOT,  // LG_QUOTE
 };
 
-bool process_record_lang(uint16_t keycode, keyrecord_t* record) {
+bool pre_process_record_ruen(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case KC_A ... KC_Z:
+        case S(KC_A)... S(KC_Z):
+        case KC_LBRC ... KC_RBRC:
+        case S(KC_LBRC)... S(KC_RBRC):
+        case KC_SCLN ... KC_SLSH: // KC_QUOT KC_GRAVE KC_COMMA KC_DOT
+        case S(KC_SCLN)... S(KC_SLSH):
+            if (should_revert_ru) {
+                set_lang(LANG_RU);
+                should_revert_ru = false;
+            }
+            break;
+        case LG_SET_EN:
+        case LG_TOGGLE:
+            if (should_revert_ru) {
+                set_lang(LANG_EN);
+                should_revert_ru = false;
+            }
+            break;
+    }
+    return true;
+}
+
+bool process_record_ruen(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case LG_TOGGLE:
             if (record->event.pressed) lang_toggle();
@@ -117,12 +135,12 @@ bool process_record_lang(uint16_t keycode, keyrecord_t* record) {
             if (record->event.pressed) set_lang(LANG_RU);
             return false;
 
-        case LG_SET_M30:
-            tg_mode = TG_MACRO30;
+        case LG_SET_M0:
+            tg_mode = TG_M0;
             return false;
 
-        case LG_SET_M31:
-            tg_mode = TG_MACRO31;
+        case LG_SET_M1M2:
+            tg_mode = TG_M1M2;
             return false;
 
         case LG_SET_DFLT:
@@ -146,7 +164,8 @@ bool process_record_lang(uint16_t keycode, keyrecord_t* record) {
                 uint8_t lang = cur_lang;
                 set_lang(LANG_EN);
                 tap_code16(en_table[keycode - LG_EN_START]);
-                set_lang(lang);
+                should_revert_ru = should_revert_ru || (cur_lang != lang);
+                revert_ru_time   = timer_read32();
             }
         }
         return false;
@@ -165,4 +184,20 @@ bool process_record_lang(uint16_t keycode, keyrecord_t* record) {
     }
 
     return true;
+}
+
+void housekeeping_task_ruen(void) {
+    if (should_revert_ru && timer_elapsed32(revert_ru_time) > 500) {
+        set_lang(LANG_RU);
+        should_revert_ru = false;
+    } else {
+        struct hid_data_t *hid_data = get_hid_data();
+        if (hid_data->layout_changed) {
+            if (hid_data->layout == LANG_EN)
+                cur_lang = LANG_EN;
+            else
+                cur_lang = LANG_RU;
+            hid_data->layout_changed = false;
+        }
+    }
 }

@@ -1,7 +1,7 @@
 #include "display.h"
 #include "qp.h"
 #include "lvgl_helpers.h"
-#include "lang_ru_en.h"
+#include "ergohaven_ruen.h"
 #include "hid.h"
 #include "ergohaven.h"
 
@@ -253,10 +253,6 @@ void display_housekeeping_task(void) {
     toggle_state(label_gui, LV_STATE_PRESSED, (get_mods() | get_oneshot_mods()) & MOD_MASK_GUI);
     struct hid_data_t *hid_data = get_hid_data();
     display_process_hid_data(hid_data);
-    if (hid_data->layout_changed) {
-        bool synced              = lang_sync_external(hid_data->layout);
-        hid_data->layout_changed = !synced;
-    }
     set_layout_label(get_cur_lang());
 }
 
